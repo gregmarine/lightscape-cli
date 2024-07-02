@@ -1,0 +1,19 @@
+{
+  "name": "lightscape",
+  "version": "1.0.0",
+  "description": "Tools for navigating God's Word. Shining His Light on the Bible.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "lightscape": "./index.js"
+  },
+  "author": "By Greg Marine",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0"
+  },
+  "type": "module"
+}
