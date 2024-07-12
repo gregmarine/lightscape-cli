@@ -11,48 +11,87 @@ const chapter = ({translation, book, chapter}) => {
 
         chapterContent.chapter.content.forEach((content) => {
           if (content) {
-            if (content.content) {
-              if (content.type === "heading") {
-                console.log(
-                  chalk.green(`Heading: ${content.content}`) 
-                )
-              } else if (content.type === "line_break") {
-                console.log(
-                  chalk.green(`Line Break: <br/>`) 
-                )
-              } else {
-                content.content.forEach((node) => {
-                  if (node.text) {
-                    chalk.green(`Formatted Text: ${node.text}`)
-                  }
-                  // implement poem: number
-                  // implement wordsOfJesus: boolean
+            if (content.type === "heading") {
+              console.log(
+                chalk.green(`Heading: ${content.content}`) 
+              )
+            } else if (content.type === "line_break") {
+              console.log(
+                chalk.green(`Line Break: <br/>`) 
+              )
+            } else if (content.type === "verse") {
+              console.log(
+                chalk.green(`Verse: ${content.number}`) 
+              )
 
-                  if (node.heading) {
-                    chalk.green(`Inline Heading: ${node.heading}`)
-                  }
-                })
-              }
-            }
+              content.content.forEach((node) => {
+                if(typeof(node) === "string") {
+                  console.log(
+                    chalk.green.bold(node)
+                  )
+                } else if(typeof(node) === "object") {
+                  if(node.noteId) {
+                    console.log(
+                      chalk.green.bold(`Footnote Reference: ${node.noteId}`)
+                    )
+                  } else if(node.text) {
+                    console.log(
+                      chalk.green.bold(`Formatted Text: ${node.text}`)
+                    )
 
-            switch (content.type) {
-              case "hebrew_subtitle":
-                console.log(
-                  chalk.green("Not sure what hebrew_subtitle is...") 
-                )
-                break
-              case "verse":
-                console.log(
-                  chalk.green(content.content) 
-                )
-                break
-              default:
-                console.log(
-                  chalk.green(content.type) 
-                )
+                    if(node.poem) {
+                      console.log(
+                        chalk.green(`Poem Indent: ${node.poem}`)
+                      )
+                    }
+
+                    if(node.wordsOfJesus) {
+                      console.log(
+                        chalk.green("Words of Jesus")
+                      )
+                    }
+                  } else {
+                    console.log(
+                      chalk.red.bold(JSON.stringify(node, null, 2))
+                    )
+                  }
+                } else {
+                  console.log(
+                    chalk.red(typeof(node))
+                  )
+
+                  console.log(
+                    chalk.red.bold(JSON.stringify(node, null, 2))
+                  )
+                }
+              })
+            } else {
+              console.log(
+                chalk.red(`[${content.type}]`)
+              )
+              
+              console.log(
+                chalk.red.bold(JSON.stringify(content, null, 2))
+              )
+              
+              /*content.content.forEach((node) => {
+                if (node.text) {
+                  chalk.green(`Formatted Text: ${node.text}`)
+                }
+                // implement poem: number
+                // implement wordsOfJesus: boolean
+
+                if (node.heading) {
+                  chalk.green(`Inline Heading: ${node.heading}`)
+                }
+              })*/
             }
           }
         })
+
+        console.log(
+          chalk.red.bold(JSON.stringify(chapterContent, null, 2))
+        )
       }
     })
 }
