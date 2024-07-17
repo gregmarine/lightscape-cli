@@ -13,13 +13,13 @@ const available_translations = ({language}) => {
           if (language) {
             if (translation.language === language && translation.englishName.trim() !== "") {
               console.log(
-                chalk.green(`${translation.englishName} (${translation.shortName}) - ${translation.licenseUrl}`)
+                chalk.green(`${translation.englishName} (${translation.id}) - ${translation.licenseUrl}`)
               )
             }
           } else {
             if (translation.englishName.trim() !== "") {
               console.log(
-                chalk.green(`${translation.englishName} (${translation.shortName}) - ${translation.licenseUrl}`)
+                chalk.green(`${translation.englishName} (${translation.id}) - ${translation.licenseUrl}`)
               )
             }
           }

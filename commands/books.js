@@ -12,7 +12,7 @@ const books = ({translation}) => {
         books.books.forEach((book) => {
           if (book) {
             console.log(
-              chalk.green(`${book.name}`)
+              chalk.green(`${book.name}: ${book.id}`)
             )
           }
         })
