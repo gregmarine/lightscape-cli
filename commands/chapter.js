@@ -9,6 +9,43 @@ const formatFootnote = (footnote, book) => {
   return `^[ ^${book}&nbsp;${footnote.reference.chapter}:${footnote.reference.verse}^ ${footnote.text}]`
 }
 
+const formatVerse = (verse, chapterContent) => {
+  // ^1^{#genesis-1-1}In the beginning God created the heavens and the earth.<br/><br/>
+  let ret = `^${verse.number}^{#${chapterContent.book.commonName.toLowerCase()}-${chapterContent.chapter.number}-${verse.number}}`
+
+  verse.content.forEach((node) => {
+    if(typeof(node) === "string") {
+      ret += node
+    } else if(typeof(node) === "object") {
+      if(node.noteId) {
+        ret += formatFootnote(footnote(node.noteId, chapterContent.chapter.footnotes), chapterContent.book.commonName)
+      } else if(node.text) {
+        ret += node.text
+
+        /*if(node.poem) {
+          console.log(
+            chalk.green(`Poem Indent: ${node.poem}`)
+          )
+        }
+
+        if(node.wordsOfJesus) {
+          console.log(
+            chalk.green("Words of Jesus")
+          )
+        }*/
+      } else {
+        console.log(
+          chalk.red.bold(JSON.stringify(node, null, 2))
+        )
+      }
+    }
+
+    ret += " "
+  })
+
+  return ret
+}
+
 const chapter = ({translation, book, chapter}) => {
   fetch(`https://bible.helloao.org/api/${translation}/${book}/${chapter}.json`)
     .then(request => request.json())
@@ -30,53 +67,8 @@ const chapter = ({translation, book, chapter}) => {
               )
             } else if (content.type === "verse") {
               console.log(
-                chalk.green(`Verse: ${content.number}`) 
+                chalk.green.bold(formatVerse(content, chapterContent)) 
               )
-
-              content.content.forEach((node) => {
-                if(typeof(node) === "string") {
-                  console.log(
-                    chalk.green.bold(`Plain Text: ${node}`)
-                  )
-                } else if(typeof(node) === "object") {
-                  if(node.noteId) {
-                    console.log(
-                      chalk.blue.bold(
-                        //`Footnote: ${JSON.stringify(footnote(node.noteId, chapterContent.chapter.footnotes), null, 2)}`
-                        `Footnote: ${formatFootnote(footnote(node.noteId, chapterContent.chapter.footnotes), chapterContent.book.commonName)}`
-                      )
-                    )
-                  } else if(node.text) {
-                    console.log(
-                      chalk.green.bold(`Formatted Text: ${JSON.stringify(node, null, 2)}`)
-                    )
-
-                    /*if(node.poem) {
-                      console.log(
-                        chalk.green(`Poem Indent: ${node.poem}`)
-                      )
-                    }
-
-                    if(node.wordsOfJesus) {
-                      console.log(
-                        chalk.green("Words of Jesus")
-                      )
-                    }*/
-                  } else {
-                    console.log(
-                      chalk.red.bold(JSON.stringify(node, null, 2))
-                    )
-                  }
-                } else {
-                  console.log(
-                    chalk.red(typeof(node))
-                  )
-
-                  console.log(
-                    chalk.red.bold(JSON.stringify(node, null, 2))
-                  )
-                }
-              })
             } else {
               console.log(
                 chalk.red(`[${content.type}]`)
@@ -101,9 +93,9 @@ const chapter = ({translation, book, chapter}) => {
           }
         })
 
-        /*console.log(
+        console.log(
           chalk.red.bold(JSON.stringify(chapterContent, null, 2))
-        )*/
+        )
       }
     })
 }
